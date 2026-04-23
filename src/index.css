@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Pacifico&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 215 60% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 60% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 60% 12%;
+
+    /* Brand: deep navy */
+    --primary: 215 80% 16%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Fire orange */
+    --fire: 16 100% 56%;
+    --fire-glow: 22 100% 62%;
+    --fire-foreground: 0 0% 100%;
+
+    /* Ice blue */
+    --ice: 199 89% 55%;
+    --ice-glow: 195 95% 70%;
+    --ice-foreground: 215 80% 16%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 215 80% 16%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 45%;
+
+    --accent: 199 89% 95%;
+    --accent-foreground: 215 80% 16%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 199 89% 55%;
+
+    --radius: 1rem;
+
+    --gradient-fire-ice: linear-gradient(135deg, hsl(var(--ice)) 0%, hsl(var(--ice-glow)) 35%, hsl(var(--fire-glow)) 65%, hsl(var(--fire)) 100%);
+    --gradient-hero: linear-gradient(120deg, hsl(215 80% 16% / 0.92) 0%, hsl(215 80% 16% / 0.7) 50%, hsl(16 100% 56% / 0.4) 100%);
+    --gradient-fire: linear-gradient(135deg, hsl(var(--fire)), hsl(var(--fire-glow)));
+    --gradient-ice: linear-gradient(135deg, hsl(var(--ice)), hsl(var(--ice-glow)));
+    --gradient-card: linear-gradient(160deg, hsl(0 0% 100%) 0%, hsl(199 89% 98%) 100%);
+
+    --shadow-fire: 0 20px 60px -15px hsl(var(--fire) / 0.45);
+    --shadow-ice: 0 20px 60px -15px hsl(var(--ice) / 0.45);
+    --shadow-elegant: 0 25px 50px -20px hsl(215 80% 16% / 0.25);
+    --shadow-glow: 0 0 40px hsl(var(--fire-glow) / 0.5);
+
+    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', 'Cairo', sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  html[dir="rtl"] body { font-family: 'Cairo', 'Inter', sans-serif; }
+  .font-script { font-family: 'Pacifico', cursive; }
+  .font-display { font-family: 'Cairo', 'Inter', sans-serif; font-weight: 800; letter-spacing: -0.02em; }
+}
+
+@layer utilities {
+  .gradient-fire-ice { background: var(--gradient-fire-ice); }
+  .gradient-fire { background: var(--gradient-fire); }
+  .gradient-ice { background: var(--gradient-ice); }
+  .gradient-hero { background: var(--gradient-hero); }
+  .gradient-card { background: var(--gradient-card); }
+  .text-gradient-fire-ice {
+    background: var(--gradient-fire-ice);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-gradient-fire {
+    background: var(--gradient-fire);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .shadow-fire { box-shadow: var(--shadow-fire); }
+  .shadow-ice { box-shadow: var(--shadow-ice); }
+  .shadow-elegant { box-shadow: var(--shadow-elegant); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+  .glass {
+    background: hsl(0 0% 100% / 0.7);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+  .glass-dark {
+    background: hsl(215 80% 16% / 0.6);
+    backdrop-filter: blur(16px) saturate(180%);
+  }
+}
+
+@keyframes float-slow { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-20px) } }
+@keyframes spin-slow { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+@keyframes pulse-glow {
+  0%,100% { filter: drop-shadow(0 0 10px hsl(var(--fire) / 0.6)); }
+  50% { filter: drop-shadow(0 0 30px hsl(var(--fire) / 0.9)); }
+}
+@keyframes pulse-ice {
+  0%,100% { filter: drop-shadow(0 0 8px hsl(var(--ice) / 0.5)); transform: scale(1); }
+  50% { filter: drop-shadow(0 0 24px hsl(var(--ice) / 0.9)); transform: scale(1.08); }
+}
+@keyframes airflow {
+  0% { transform: translateX(-100%); opacity: 0; }
+  50% { opacity: 0.6; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 8s linear infinite; }
+.animate-pulse-glow { animation: pulse-glow 2.5s ease-in-out infinite; }
+.animate-pulse-ice { animation: pulse-ice 3s ease-in-out infinite; }
+.animate-airflow { animation: airflow 8s linear infinite; }
