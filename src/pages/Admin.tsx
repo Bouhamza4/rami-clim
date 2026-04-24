@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useServices, type Service } from "@/hooks/useServices";
@@ -31,6 +32,7 @@ type Tab = "stats" | "messages" | "reviews" | "services" | "contact";
 
 const Admin = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { user, isAdmin, loading: roleLoading } = useUserRole();
   const [tab, setTab] = useState<Tab>("stats");
   const [unreadCount, setUnreadCount] = useState(0);
@@ -39,11 +41,11 @@ const Admin = () => {
     if (!roleLoading) {
       if (!user) navigate("/auth", { replace: true });
       else if (!isAdmin) {
-        toast.error("Accès refusé : compte non administrateur");
+        toast.error(t("admin.accessDenied"));
         navigate("/", { replace: true });
       }
     }
-  }, [user, isAdmin, roleLoading, navigate]);
+  }, [user, isAdmin, roleLoading, navigate, t]);
 
   useEffect(() => {
     if (!isAdmin) return;
@@ -75,11 +77,11 @@ const Admin = () => {
   }
 
   const tabs: { key: Tab; label: string; Icon: typeof Star; badge?: number }[] = [
-    { key: "stats", label: "Statistiques", Icon: BarChart3 },
-    { key: "messages", label: "Messages", Icon: Inbox, badge: unreadCount },
-    { key: "reviews", label: "Avis", Icon: Star },
-    { key: "services", label: "Services", Icon: Wrench },
-    { key: "contact", label: "Contact", Icon: Phone },
+    { key: "stats", label: t("admin.tabs.stats"), Icon: BarChart3 },
+    { key: "messages", label: t("admin.tabs.messages"), Icon: Inbox, badge: unreadCount },
+    { key: "reviews", label: t("admin.tabs.reviews"), Icon: Star },
+    { key: "services", label: t("admin.tabs.services"), Icon: Wrench },
+    { key: "contact", label: t("admin.tabs.contact"), Icon: Phone },
   ];
 
   return (
@@ -106,7 +108,7 @@ const Admin = () => {
             <div>
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4 text-fire" />
-                <h1 className="font-display text-2xl md:text-3xl text-primary">Tableau de bord</h1>
+                <h1 className="font-display text-2xl md:text-3xl text-primary">{t("admin.title")}</h1>
               </div>
               <p className="text-xs text-muted-foreground">{user?.email}</p>
             </div>
@@ -115,7 +117,7 @@ const Admin = () => {
             onClick={logout}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-border hover:bg-destructive hover:text-destructive-foreground transition-colors text-sm font-bold"
           >
-            <LogOut className="w-4 h-4" /> Déconnexion
+            <LogOut className="w-4 h-4" /> {t("admin.logout")}
           </button>
         </motion.div>
 
@@ -186,6 +188,7 @@ const AdminBackground = () => (
 
 /* ─────────────  STATS  ───────────── */
 const StatsTab = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState<{
     total: number; approved: number; pending: number; avg: number; services: number;
     msgs: number; unread: number;
@@ -257,12 +260,12 @@ const StatsTab = () => {
   if (!data) return <Loader2 className="w-6 h-6 animate-spin mx-auto text-fire" />;
 
   const cards = [
-    { label: "Avis totaux", value: data.total, Icon: Star, tone: "ice" },
-    { label: "Approuvés", value: data.approved, Icon: Check, tone: "fire" },
-    { label: "En attente", value: data.pending, Icon: Eye, tone: "primary" },
-    { label: "Note moyenne", value: data.avg + "★", Icon: TrendingUp, tone: "fire" },
-    { label: "Messages", value: data.msgs, Icon: MessageSquare, tone: "ice" },
-    { label: "Non lus", value: data.unread, Icon: Mail, tone: "fire" },
+    { label: t("admin.stats.totalReviews"), value: data.total, Icon: Star, tone: "ice" },
+    { label: t("admin.stats.approved"), value: data.approved, Icon: Check, tone: "fire" },
+    { label: t("admin.stats.pending"), value: data.pending, Icon: Eye, tone: "primary" },
+    { label: t("admin.stats.avgRating"), value: data.avg + "★", Icon: TrendingUp, tone: "fire" },
+    { label: t("admin.stats.messages"), value: data.msgs, Icon: MessageSquare, tone: "ice" },
+    { label: t("admin.stats.unread"), value: data.unread, Icon: Mail, tone: "fire" },
   ] as const;
 
   const PIE_COLORS = ["hsl(var(--fire))", "hsl(var(--ice))", "hsl(var(--fire-glow))", "hsl(var(--ice-glow))", "hsl(var(--primary))", "hsl(var(--muted-foreground))"];
@@ -296,8 +299,8 @@ const StatsTab = () => {
           transition={{ delay: 0.2 }}
           className="gradient-card rounded-2xl p-5 border border-border/50 shadow-sm"
         >
-          <h3 className="font-display text-lg text-primary mb-1">Activité — 6 derniers mois</h3>
-          <p className="text-xs text-muted-foreground mb-4">Avis & messages reçus par mois</p>
+          <h3 className="font-display text-lg text-primary mb-1">{t("admin.stats.activityTitle")}</h3>
+          <p className="text-xs text-muted-foreground mb-4">{t("admin.stats.activitySub")}</p>
           <ResponsiveContainer width="100%" height={240}>
             <AreaChart data={data.monthly}>
               <defs>
@@ -315,8 +318,8 @@ const StatsTab = () => {
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} allowDecimals={false} />
               <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 12 }} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Area type="monotone" dataKey="reviews" name="Avis" stroke="hsl(var(--fire))" fill="url(#gFire)" strokeWidth={2} />
-              <Area type="monotone" dataKey="messages" name="Messages" stroke="hsl(var(--ice))" fill="url(#gIce)" strokeWidth={2} />
+              <Area type="monotone" dataKey="reviews" name={t("admin.tabs.reviews")} stroke="hsl(var(--fire))" fill="url(#gFire)" strokeWidth={2} />
+              <Area type="monotone" dataKey="messages" name={t("admin.tabs.messages")} stroke="hsl(var(--ice))" fill="url(#gIce)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </motion.div>
@@ -327,15 +330,15 @@ const StatsTab = () => {
           transition={{ delay: 0.3 }}
           className="gradient-card rounded-2xl p-5 border border-border/50 shadow-sm"
         >
-          <h3 className="font-display text-lg text-primary mb-1">Distribution des notes</h3>
-          <p className="text-xs text-muted-foreground mb-4">Avis approuvés par étoile</p>
+          <h3 className="font-display text-lg text-primary mb-1">{t("admin.stats.distributionTitle")}</h3>
+          <p className="text-xs text-muted-foreground mb-4">{t("admin.stats.distributionSub")}</p>
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={data.ratingDist}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis dataKey="rating" stroke="hsl(var(--muted-foreground))" fontSize={11} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} allowDecimals={false} />
               <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 12 }} />
-              <Bar dataKey="count" name="Avis" fill="hsl(var(--fire))" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="count" name={t("admin.tabs.reviews")} fill="hsl(var(--fire))" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </motion.div>
@@ -347,8 +350,8 @@ const StatsTab = () => {
             transition={{ delay: 0.4 }}
             className="gradient-card rounded-2xl p-5 border border-border/50 shadow-sm lg:col-span-2"
           >
-            <h3 className="font-display text-lg text-primary mb-1">Services les plus demandés</h3>
-            <p className="text-xs text-muted-foreground mb-4">Avis & messages combinés</p>
+            <h3 className="font-display text-lg text-primary mb-1">{t("admin.stats.servicesTitle")}</h3>
+            <p className="text-xs text-muted-foreground mb-4">{t("admin.stats.servicesSub")}</p>
             <ResponsiveContainer width="100%" height={260}>
               <PieChart>
                 <Pie data={data.serviceDist} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label={(e) => e.name}>
@@ -366,6 +369,7 @@ const StatsTab = () => {
 
 /* ─────────────  MESSAGES  ───────────── */
 const MessagesTab = () => {
+  const { t } = useTranslation();
   const [list, setList] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "unread">("all");
@@ -385,7 +389,7 @@ const MessagesTab = () => {
   const remove = async (id: string) => {
     if (!confirm("Supprimer ce message ?")) return;
     const { error } = await supabase.from("contact_messages").delete().eq("id", id);
-    if (error) toast.error(error.message); else { toast.success("Supprimé"); load(); }
+    if (error) toast.error(error.message); else { toast.success(t("admin.deleted")); load(); }
   };
 
   if (loading) return <Loader2 className="w-6 h-6 animate-spin mx-auto text-fire" />;
@@ -403,12 +407,12 @@ const MessagesTab = () => {
               filter === f ? "gradient-fire text-fire-foreground shadow-fire" : "bg-background border border-border text-muted-foreground hover:text-foreground"
             }`}
           >
-            {f === "all" ? `Tous (${list.length})` : `Non lus (${list.filter((m) => !m.is_read).length})`}
+            {f === "all" ? `${t("admin.all")} (${list.length})` : `${t("admin.unread")} (${list.filter((m) => !m.is_read).length})`}
           </button>
         ))}
       </div>
 
-      {visible.length === 0 && <div className="text-center text-muted-foreground py-12">Aucun message</div>}
+      {visible.length === 0 && <div className="text-center text-muted-foreground py-12">{t("admin.noMessages")}</div>}
 
       <AnimatePresence>
         {visible.map((m, i) => (
@@ -436,7 +440,7 @@ const MessagesTab = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button onClick={() => toggleRead(m)} className={`p-2 rounded-lg ${m.is_read ? "bg-fire/10 text-fire" : "bg-ice/10 text-ice"} hover:scale-110 transition-transform`} title={m.is_read ? "Marquer non lu" : "Marquer lu"}>
+                <button onClick={() => toggleRead(m)} className={`p-2 rounded-lg ${m.is_read ? "bg-fire/10 text-fire" : "bg-ice/10 text-ice"} hover:scale-110 transition-transform`} title={m.is_read ? t("admin.markUnread") : t("admin.markRead")}>
                   {m.is_read ? <Eye className="w-4 h-4" /> : <Check className="w-4 h-4" />}
                 </button>
                 <button onClick={() => remove(m.id)} className="p-2 rounded-lg bg-destructive/10 text-destructive hover:scale-110 transition-transform">
@@ -455,6 +459,7 @@ const MessagesTab = () => {
 
 /* ─────────────  REVIEWS  ───────────── */
 const ReviewsTab = () => {
+  const { t } = useTranslation();
   const [list, setList] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -469,20 +474,20 @@ const ReviewsTab = () => {
   const toggle = async (id: string, approved: boolean) => {
     const { error } = await supabase.from("reviews").update({ approved: !approved }).eq("id", id);
     if (error) toast.error(error.message);
-    else { toast.success(!approved ? "Avis approuvé" : "Avis retiré"); load(); }
+    else { toast.success(!approved ? t("admin.reviewApproved") : t("admin.reviewRemoved")); load(); }
   };
   const remove = async (id: string) => {
     if (!confirm("Supprimer cet avis ?")) return;
     const { error } = await supabase.from("reviews").delete().eq("id", id);
     if (error) toast.error(error.message);
-    else { toast.success("Supprimé"); load(); }
+    else { toast.success(t("admin.deleted")); load(); }
   };
 
   if (loading) return <Loader2 className="w-6 h-6 animate-spin mx-auto text-fire" />;
 
   return (
     <div className="space-y-4">
-      {list.length === 0 && <div className="text-center text-muted-foreground py-12">Aucun avis</div>}
+      {list.length === 0 && <div className="text-center text-muted-foreground py-12">{t("admin.noReviews")}</div>}
       <AnimatePresence>
         {list.map((r, i) => (
           <motion.div
@@ -500,7 +505,7 @@ const ReviewsTab = () => {
                   <span className="font-bold text-primary">{r.name}</span>
                   {r.city && <span className="text-xs text-muted-foreground">· {r.city}</span>}
                   <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${r.approved ? "bg-ice/15 text-ice" : "bg-fire/15 text-fire"}`}>
-                    {r.approved ? "Approuvé" : "En attente"}
+                    {r.approved ? t("admin.approved") : t("admin.pending")}
                   </span>
                 </div>
                 <StarRating value={r.rating} readOnly size={16} />
@@ -532,23 +537,24 @@ const emptyService: Partial<Service> = {
 };
 
 const ServicesTab = () => {
+  const { t } = useTranslation();
   const { services, reload, loading } = useServices(true);
   const [editing, setEditing] = useState<Partial<Service> | null>(null);
 
   const save = async () => {
     if (!editing?.slug || !editing.title || !editing.short_description) {
-      toast.error("Slug, titre et description courte requis"); return;
+      toast.error(t("admin.serviceRequired")); return;
     }
     const payload = { ...editing } as any;
     if (payload.id) {
       const { id, ...upd } = payload;
       const { error } = await supabase.from("services").update(upd).eq("id", id);
       if (error) return toast.error(error.message);
-      toast.success("Service mis à jour");
+      toast.success(t("admin.serviceUpdated"));
     } else {
       const { error } = await supabase.from("services").insert(payload);
       if (error) return toast.error(error.message);
-      toast.success("Service ajouté");
+      toast.success(t("admin.serviceAdded"));
     }
     setEditing(null); reload();
   };
@@ -556,7 +562,7 @@ const ServicesTab = () => {
     if (!confirm("Supprimer ce service ?")) return;
     const { error } = await supabase.from("services").delete().eq("id", id);
     if (error) toast.error(error.message);
-    else { toast.success("Supprimé"); reload(); }
+    else { toast.success(t("admin.deleted")); reload(); }
   };
 
   if (loading) return <Loader2 className="w-6 h-6 animate-spin mx-auto text-fire" />;
@@ -567,7 +573,7 @@ const ServicesTab = () => {
         onClick={() => setEditing(emptyService)}
         className="inline-flex items-center gap-2 px-5 py-3 rounded-full gradient-fire text-fire-foreground font-bold shadow-fire hover:scale-105 transition-transform"
       >
-        <Plus className="w-4 h-4" /> Ajouter un service
+        <Plus className="w-4 h-4" /> {t("admin.addService")}
       </button>
 
       <div className="grid md:grid-cols-2 gap-4">
@@ -607,7 +613,7 @@ const ServicesTab = () => {
             initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }}
             className="bg-background rounded-3xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto my-8 shadow-elegant"
           >
-            <h3 className="font-display text-xl text-primary mb-4">{editing.id ? "Modifier" : "Nouveau"} service</h3>
+            <h3 className="font-display text-xl text-primary mb-4">{editing.id ? t("admin.editService") : t("admin.newService")}</h3>
             <div className="grid sm:grid-cols-2 gap-3">
               <input className="px-4 py-2.5 rounded-xl border border-border bg-background" placeholder="Slug (clim, chauffage...)" value={editing.slug || ""} onChange={(e) => setEditing({ ...editing, slug: e.target.value })} />
               <input className="px-4 py-2.5 rounded-xl border border-border bg-background" placeholder="Icône (snowflake, flame, sun...)" value={editing.icon || ""} onChange={(e) => setEditing({ ...editing, icon: e.target.value })} />
@@ -619,13 +625,13 @@ const ServicesTab = () => {
               <input type="number" className="px-4 py-2.5 rounded-xl border border-border bg-background" placeholder="Ordre" value={editing.display_order ?? 0} onChange={(e) => setEditing({ ...editing, display_order: Number(e.target.value) })} />
               <label className="flex items-center gap-2 px-4 py-2.5">
                 <input type="checkbox" checked={editing.active ?? true} onChange={(e) => setEditing({ ...editing, active: e.target.checked })} />
-                Service actif
+                {t("admin.serviceActive")}
               </label>
             </div>
             <div className="flex gap-3 mt-6 justify-end">
-              <button onClick={() => setEditing(null)} className="px-5 py-2.5 rounded-full bg-muted hover:bg-muted/70 font-bold">Annuler</button>
+              <button onClick={() => setEditing(null)} className="px-5 py-2.5 rounded-full bg-muted hover:bg-muted/70 font-bold">{t("admin.cancel")}</button>
               <button onClick={save} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full gradient-fire text-fire-foreground font-bold shadow-fire">
-                <Save className="w-4 h-4" /> Enregistrer
+                <Save className="w-4 h-4" /> {t("admin.save")}
               </button>
             </div>
           </motion.div>
@@ -637,6 +643,7 @@ const ServicesTab = () => {
 
 /* ─────────────  CONTACT  ───────────── */
 const ContactTab = () => {
+  const { t } = useTranslation();
   const { info, loading } = useContactInfo();
   const [form, setForm] = useState(info);
   const [saving, setSaving] = useState(false);
@@ -655,7 +662,7 @@ const ContactTab = () => {
     }
     setSaving(false);
     if (error) toast.error(error.message);
-    else toast.success("Informations enregistrées");
+    else toast.success(t("admin.contactSaved"));
   };
 
   if (loading) return <Loader2 className="w-6 h-6 animate-spin mx-auto text-fire" />;

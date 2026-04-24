@@ -16,7 +16,7 @@ export const WeatherWidget = ({ compact = false }: { compact?: boolean }) => {
 
   if (loading || !weather) {
     return (
-      <div className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-full glass border border-border/50 ${compact ? "" : ""}`}>
+      <div className={`flex items-center gap-1 px-2 py-1 sm:gap-1.5 sm:px-2.5 sm:py-1.5 rounded-full glass border border-border/50 ${compact ? "" : ""}`}>
         <Loader2 className="w-3.5 h-3.5 animate-spin text-muted-foreground" />
       </div>
     );
@@ -30,7 +30,7 @@ export const WeatherWidget = ({ compact = false }: { compact?: boolean }) => {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       title="Tanger"
-      className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-full glass border border-border/50 hover:border-fire/40 transition-colors"
+      className="flex items-center gap-1 px-2 py-1 sm:gap-1.5 sm:px-2.5 sm:py-1.5 rounded-full glass border border-border/50 hover:border-fire/40 transition-colors"
     >
       <motion.span
         animate={cat === "sun" ? { rotate: 360 } : {}}
@@ -40,7 +40,7 @@ export const WeatherWidget = ({ compact = false }: { compact?: boolean }) => {
         <I className={`w-4 h-4 ${color} ${glow}`} />
       </motion.span>
       <span className="text-xs font-bold text-foreground tabular-nums">{weather.temp}°</span>
-      <span className="hidden md:inline text-[10px] uppercase tracking-wider text-muted-foreground">Tanger</span>
+      <span className="max-w-[4.5rem] truncate text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">Tanger</span>
     </motion.div>
   );
 };

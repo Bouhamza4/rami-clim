@@ -29,3 +29,19 @@ In Supabase Auth settings, add your domains to:
 
 - `Site URL` (your production domain)
 - `Redirect URLs` (for example `https://your-domain.com/admin` and your preview domains)
+
+## Contact email notifications
+
+The contact form saves messages in `contact_messages` and also calls a Supabase Edge Function named `contact-notify` to send an email notification.
+
+Set these Supabase secrets:
+
+- `RESEND_API_KEY` (required)
+- `CONTACT_NOTIFY_TO` (optional, defaults to `Younesrm07@gmail.com`)
+- `CONTACT_NOTIFY_FROM` (optional, defaults to `Rami Clim <onboarding@resend.dev>`)
+
+Deploy function:
+
+```bash
+supabase functions deploy contact-notify --no-verify-jwt
+```

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Menu, X, Shield } from "lucide-react";
+import { Menu, X, Shield, LogIn } from "lucide-react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { WeatherWidget } from "./WeatherWidget";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -30,6 +30,7 @@ export const Navbar = () => {
     { to: "/gallery", label: t("nav.gallery") },
     { to: "/carte", label: t("nav.carte") },
     { to: "/contact", label: t("nav.contact") },
+    { to: "/auth", label: t("nav.auth") },
   ];
 
   return (
@@ -70,9 +71,17 @@ export const Navbar = () => {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <WeatherWidget />
           <LanguageSwitcher />
+          <Link
+            to="/auth"
+            className="inline-flex items-center gap-1 px-2.5 py-2 rounded-full border border-border/60 bg-background/80 text-xs font-bold text-foreground hover:border-fire/50 hover:bg-fire/5 transition-colors sm:px-3"
+            title={t("nav.auth")}
+          >
+            <LogIn className="w-3.5 h-3.5 shrink-0" />
+            <span className="hidden sm:inline">{t("nav.auth")}</span>
+          </Link>
           {isAdmin && (
             <Link to="/admin" className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-primary text-primary-foreground text-xs font-bold hover:scale-105 transition-transform" title="Admin">
               <Shield className="w-3.5 h-3.5" /> Admin

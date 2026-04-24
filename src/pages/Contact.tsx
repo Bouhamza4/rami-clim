@@ -44,6 +44,21 @@ const Contact = () => {
       toast.error(error.message);
       return;
     }
+
+    // Send owner email notification without blocking DB persistence.
+    const { error: notifyError } = await supabase.functions.invoke("contact-notify", {
+      body: {
+        name: parsed.data.name,
+        email: parsed.data.email,
+        phone: parsed.data.phone || null,
+        service: parsed.data.service || null,
+        message: parsed.data.message,
+      },
+    });
+    if (notifyError) {
+      toast.error(t("contact.notifyError"));
+    }
+
     toast.success(t("contact.success"));
     setForm({ name: "", email: "", phone: "", service: "", message: "" });
   };
