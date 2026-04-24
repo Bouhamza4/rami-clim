@@ -35,7 +35,7 @@ export const IntroVideo = () => {
     tryPlay();
     v.addEventListener("canplay", tryPlay);
 
-    const max = setTimeout(() => finish(), 8000);
+    const max = setTimeout(() => finish(), 5000);
     return () => {
       clearTimeout(max);
       v.removeEventListener("canplay", tryPlay);
@@ -57,9 +57,7 @@ export const IntroVideo = () => {
         onEnded={finish}
         className="w-full h-full object-cover opacity-90"
       >
-        {/* First source must be reachable: a 404 on <source> fires error and can skip playback in some browsers. */}
-        <source src="https://eagleheatingac.net/wp-content/uploads/2019/02/Pexels-Videos-1395943.mp4" type="video/mp4" />
-        <source src="/intro-hvac.mp4" type="video/mp4" />
+        <source src="/intro-hvac.mp4#t=0,5" type="video/mp4" />
         <source src={introVideo.url} type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/60 pointer-events-none" />

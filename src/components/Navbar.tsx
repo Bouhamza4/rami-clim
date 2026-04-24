@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Menu, X, Shield, LogIn } from "lucide-react";
+import { Menu, X, Shield, LogIn, User } from "lucide-react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { WeatherWidget } from "./WeatherWidget";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -9,7 +9,7 @@ import logoOrig from "@/assets/logo-original.jpeg";
 
 export const Navbar = () => {
   const { t } = useTranslation();
-  const { isAdmin } = useUserRole();
+  const { isAdmin, user, loading } = useUserRole();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const loc = useLocation();
@@ -30,8 +30,8 @@ export const Navbar = () => {
     { to: "/gallery", label: t("nav.gallery") },
     { to: "/carte", label: t("nav.carte") },
     { to: "/contact", label: t("nav.contact") },
-    { to: "/auth", label: t("nav.auth") },
-  ];
+    ...(!loading && !user ? [{ to: "/auth", label: t("nav.auth") }] : []),
+  ] as const;
 
   return (
     <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${scrolled ? "glass shadow-elegant py-2" : "bg-background/70 backdrop-blur-md py-3 border-b border-border/40"}`}>
@@ -74,15 +74,26 @@ export const Navbar = () => {
         <div className="flex items-center gap-1.5 sm:gap-2">
           <WeatherWidget />
           <LanguageSwitcher />
-          <Link
-            to="/auth"
-            className="inline-flex items-center gap-1 px-2.5 py-2 rounded-full border border-border/60 bg-background/80 text-xs font-bold text-foreground hover:border-fire/50 hover:bg-fire/5 transition-colors sm:px-3"
-            title={t("nav.auth")}
-          >
-            <LogIn className="w-3.5 h-3.5 shrink-0" />
-            <span className="hidden sm:inline">{t("nav.auth")}</span>
-          </Link>
-          {isAdmin && (
+          {!loading && !user && (
+            <Link
+              to="/auth"
+              className="inline-flex items-center gap-1 px-2.5 py-2 rounded-full border border-border/60 bg-background/80 text-xs font-bold text-foreground hover:border-fire/50 hover:bg-fire/5 transition-colors sm:px-3"
+              title={t("nav.auth")}
+            >
+              <LogIn className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline">{t("nav.auth")}</span>
+            </Link>
+          )}
+          {!loading && user && !isAdmin && (
+            <Link
+              to="/client"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-ice/15 text-ice text-xs font-bold hover:scale-105 transition-transform"
+              title={t("nav.clientArea")}
+            >
+              <User className="w-3.5 h-3.5" /> {t("nav.clientArea")}
+            </Link>
+          )}
+          {!loading && isAdmin && (
             <Link to="/admin" className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-primary text-primary-foreground text-xs font-bold hover:scale-105 transition-transform" title="Admin">
               <Shield className="w-3.5 h-3.5" /> Admin
             </Link>
