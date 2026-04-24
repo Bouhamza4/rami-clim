@@ -45,3 +45,39 @@ Deploy function:
 ```bash
 supabase functions deploy contact-notify --no-verify-jwt
 ```
+
+## Google authentication
+
+This app supports Google login via Supabase Auth.
+
+1) In Supabase Dashboard -> Authentication -> Providers, enable `Google` and configure Client ID/Secret.
+2) In Supabase Dashboard -> Authentication -> URL Configuration, add your domains to `Site URL` and `Redirect URLs` (include `/auth`).
+
+The UI button is in `src/pages/Auth.tsx`.
+
+## AI Agent (Edge Function)
+
+The `/assistant` page calls a Supabase Edge Function named `ai-agent`.
+It loads its "knowledge base" from your Supabase database tables: `services` and `contact_info`.
+
+If the Edge Function is not deployed, the app automatically falls back to a Vercel Serverless Function at `/api/ai-agent` (recommended for Vercel deployments).
+
+Set these Supabase secrets:
+
+- `OPENAI_API_KEY` (required)
+- `OPENAI_MODEL` (optional, defaults to `gpt-4o-mini`)
+
+Deploy function:
+
+```bash
+supabase functions deploy ai-agent
+```
+
+### Vercel API (fallback / recommended)
+
+Add these env vars in Vercel Project Settings:
+
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL` (optional)
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`

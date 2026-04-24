@@ -1,5 +1,5 @@
 export default {
-  nav: { home: "Home", services: "Services", about: "About", gallery: "Gallery", carte: "Business Card", contact: "Contact", auth: "Sign in", clientArea: "Client area" },
+  nav: { home: "Home", services: "Services", about: "About", gallery: "Gallery", carte: "Business Card", contact: "Contact", auth: "Sign in", clientArea: "Client area", assistant: "AI Agent" },
   cta: { request: "Request a service", contact: "Contact now", whatsapp: "WhatsApp", call: "Call" },
   hero: {
     badge: "Expert for over 10 years",
@@ -85,6 +85,7 @@ export default {
     signupSub: "Create your client account",
     loginTab: "Sign in",
     signupTab: "Sign up",
+    googleBtn: "Continue with Google",
     fullNamePh: "Full name",
     phonePh: "Phone (optional)",
     emailPh: "email@example.com",
@@ -94,6 +95,17 @@ export default {
     footer: "Admins and clients can log in from this page",
     invalid: "Please fill required fields correctly",
     signupOk: "Account created! Check your email then sign in.",
+  },
+  assistant: {
+    title: "AI Agent",
+    subtitle: "Ask about services, prices, or booking",
+    welcome: "Hi! Ask me anything about Rami Clim services and I’ll help you quickly.",
+    placeholder: "Type your question…",
+    send: "Send",
+    thinking: "Thinking…",
+    clear: "Clear",
+    error: "Could not get an answer. Try again.",
+    disclaimer: "AI answers can be inaccurate. For urgent matters, contact us directly.",
   },
   client: {
     title: "Client area",

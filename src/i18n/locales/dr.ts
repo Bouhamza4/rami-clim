@@ -1,5 +1,5 @@
 export default {
-  nav: { home: "الرئيسية", services: "الخدمات", about: "علينا", gallery: "الصور", carte: "كارط الفيزيت", contact: "تواصل", auth: "دخول", clientArea: "فضاء الزبون" },
+  nav: { home: "الرئيسية", services: "الخدمات", about: "علينا", gallery: "الصور", carte: "كارط الفيزيت", contact: "تواصل", auth: "دخول", clientArea: "فضاء الزبون", assistant: "مساعد ذكي" },
   cta: { request: "طلب خدمة", contact: "تواصل دابا", whatsapp: "واتساب", call: "عيط" },
   hero: {
     badge: "خبرة كتر من 10 سنين",
@@ -85,6 +85,7 @@ export default {
     signupSub: "صاوب حساب زبون جديد",
     loginTab: "دخول",
     signupTab: "تسجيل",
+    googleBtn: "كمل ب Google",
     fullNamePh: "السمية كاملة",
     phonePh: "التيليفون (اختياري)",
     emailPh: "email@example.com",
@@ -94,6 +95,17 @@ export default {
     footer: "الأدمن والزبناء يقدرو يدخلو من هاد الصفحة",
     invalid: "عمر الخانات الضرورية مزيان",
     signupOk: "تصاوب الحساب! شوف الإيميل ديالك ومن بعد دخل.",
+  },
+  assistant: {
+    title: "مساعد ذكي",
+    subtitle: "سول على الخدمات ولا الثمن ولا المواعيد",
+    welcome: "سلام! سولني على أي حاجة على خدمات Rami Clim وغادي نعاونك بسرعة.",
+    placeholder: "كتب سؤالك…",
+    send: "صيفط",
+    thinking: "كنفكر…",
+    clear: "مسح",
+    error: "ماقدرتش نجيب جواب. عاود جرّب.",
+    disclaimer: "أجوبة الذكاء الاصطناعي ممكن تكون فيها أخطاء. إلا كانت شي حالة مستعجلة تواصل معنا مباشرة.",
   },
   client: {
     title: "فضاء الزبون",

@@ -18,6 +18,7 @@ import Carte from "./pages/Carte";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Client from "./pages/Client";
+import Assistant from "./pages/Assistant";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/client" element={<Client />} />
+              <Route path="/assistant" element={<Assistant />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

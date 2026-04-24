@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, LogIn, UserPlus, Shield } from "lucide-react";
+import { Chrome, Loader2, LogIn, Shield, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -15,6 +15,7 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState(false);
 
   const redirectByRole = useCallback(async (userId: string) => {
     const { data } = await supabase
@@ -27,6 +28,27 @@ const Auth = () => {
     navigate(data?.role === "admin" ? "/admin" : "/client", { replace: true });
   }, [navigate]);
 
+  // OAuth PKCE callback safety: if Supabase didn't auto-exchange the `code`, do it here.
+  useEffect(() => {
+    const run = async () => {
+      const url = new URL(window.location.href);
+      const code = url.searchParams.get("code");
+      if (!code) return;
+
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        const { error } = await supabase.auth.exchangeCodeForSession(window.location.href);
+        if (error) toast.error(error.message);
+      }
+
+      url.searchParams.delete("code");
+      url.searchParams.delete("state");
+      window.history.replaceState({}, document.title, url.pathname + url.search);
+    };
+
+    void run();
+  }, []);
+
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
       if (s?.user) redirectByRole(s.user.id);
@@ -36,6 +58,16 @@ const Auth = () => {
     });
     return () => sub.subscription.unsubscribe();
   }, [redirectByRole]);
+
+  const loginWithGoogle = async () => {
+    setOauthLoading(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/auth` },
+    });
+    if (error) toast.error(error.message);
+    setOauthLoading(false);
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,6 +132,16 @@ const Auth = () => {
             </button>
           ))}
         </div>
+
+        <button
+          type="button"
+          onClick={loginWithGoogle}
+          disabled={oauthLoading || loading}
+          className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-border bg-background/60 font-bold hover:bg-accent transition-colors disabled:opacity-60 mb-5"
+        >
+          {oauthLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Chrome className="w-5 h-5" />}
+          {t("auth.googleBtn")}
+        </button>
 
         <form onSubmit={submit} className="space-y-4">
           {mode === "signup" && (

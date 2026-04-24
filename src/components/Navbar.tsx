@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Menu, X, Shield, LogIn, User } from "lucide-react";
+import { Menu, X, Shield, LogIn, Sparkles, User } from "lucide-react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { WeatherWidget } from "./WeatherWidget";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -84,6 +84,15 @@ export const Navbar = () => {
               <span className="hidden sm:inline">{t("nav.auth")}</span>
             </Link>
           )}
+          {!loading && (
+            <Link
+              to="/assistant"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-muted/60 text-foreground text-xs font-bold hover:scale-105 transition-transform"
+              title={t("nav.assistant")}
+            >
+              <Sparkles className="w-3.5 h-3.5" /> {t("nav.assistant")}
+            </Link>
+          )}
           {!loading && user && !isAdmin && (
             <Link
               to="/client"
@@ -131,6 +140,42 @@ export const Navbar = () => {
                 {l.label}
               </NavLink>
             ))}
+            {!loading && (
+              <NavLink
+                to="/assistant"
+                className={({ isActive }) =>
+                  `px-4 py-3 rounded-xl font-semibold transition-colors ${
+                    isActive ? "gradient-fire text-fire-foreground" : "text-foreground hover:bg-accent"
+                  }`
+                }
+              >
+                {t("nav.assistant")}
+              </NavLink>
+            )}
+            {!loading && user && !isAdmin && (
+              <NavLink
+                to="/client"
+                className={({ isActive }) =>
+                  `px-4 py-3 rounded-xl font-semibold transition-colors ${
+                    isActive ? "gradient-fire text-fire-foreground" : "text-foreground hover:bg-accent"
+                  }`
+                }
+              >
+                {t("nav.clientArea")}
+              </NavLink>
+            )}
+            {!loading && isAdmin && (
+              <NavLink
+                to="/admin"
+                className={({ isActive }) =>
+                  `px-4 py-3 rounded-xl font-semibold transition-colors ${
+                    isActive ? "gradient-fire text-fire-foreground" : "text-foreground hover:bg-accent"
+                  }`
+                }
+              >
+                Admin
+              </NavLink>
+            )}
           </nav>
         </div>
       )}

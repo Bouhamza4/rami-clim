@@ -1,5 +1,5 @@
 export default {
-  nav: { home: "Home", services: "Diensten", about: "Over ons", gallery: "Galerij", carte: "Visitekaartje", contact: "Contact", auth: "Inloggen", clientArea: "Klantenruimte" },
+  nav: { home: "Home", services: "Diensten", about: "Over ons", gallery: "Galerij", carte: "Visitekaartje", contact: "Contact", auth: "Inloggen", clientArea: "Klantenruimte", assistant: "AI-agent" },
   cta: { request: "Service aanvragen", contact: "Neem contact op", whatsapp: "WhatsApp", call: "Bel" },
   hero: {
     badge: "Expert sinds meer dan 10 jaar",
@@ -85,6 +85,7 @@ export default {
     signupSub: "Maak je klantaccount aan",
     loginTab: "Inloggen",
     signupTab: "Registreren",
+    googleBtn: "Doorgaan met Google",
     fullNamePh: "Volledige naam",
     phonePh: "Telefoon (optioneel)",
     emailPh: "email@voorbeeld.com",
@@ -94,6 +95,17 @@ export default {
     footer: "Admins en klanten kunnen via deze pagina inloggen",
     invalid: "Vul de verplichte velden correct in",
     signupOk: "Account aangemaakt! Controleer je e-mail en log daarna in.",
+  },
+  assistant: {
+    title: "AI-agent",
+    subtitle: "Vragen over diensten, prijzen of afspraken",
+    welcome: "Hallo! Stel je vraag over Rami Clim en ik help je snel verder.",
+    placeholder: "Typ je vraag…",
+    send: "Versturen",
+    thinking: "Denkt na…",
+    clear: "Wissen",
+    error: "Kon geen antwoord krijgen. Probeer het opnieuw.",
+    disclaimer: "AI-antwoorden kunnen onjuist zijn. Neem bij urgentie direct contact op.",
   },
   client: {
     title: "Klantenruimte",

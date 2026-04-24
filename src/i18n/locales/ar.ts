@@ -1,5 +1,5 @@
 export default {
-  nav: { home: "الرئيسية", services: "الخدمات", about: "من نحن", gallery: "المعرض", carte: "بطاقة العمل", contact: "اتصل بنا", auth: "تسجيل الدخول", clientArea: "مساحة العميل" },
+  nav: { home: "الرئيسية", services: "الخدمات", about: "من نحن", gallery: "المعرض", carte: "بطاقة العمل", contact: "اتصل بنا", auth: "تسجيل الدخول", clientArea: "مساحة العميل", assistant: "المساعد الذكي" },
   cta: { request: "اطلب خدمة", contact: "تواصل الآن", whatsapp: "واتساب", call: "اتصل" },
   hero: {
     badge: "خبير منذ أكثر من 10 سنوات",
@@ -85,6 +85,7 @@ export default {
     signupSub: "أنشئ حساب العميل",
     loginTab: "دخول",
     signupTab: "إنشاء حساب",
+    googleBtn: "المتابعة عبر Google",
     fullNamePh: "الاسم الكامل",
     phonePh: "الهاتف (اختياري)",
     emailPh: "email@example.com",
@@ -94,6 +95,17 @@ export default {
     footer: "يمكن للمشرفين والعملاء تسجيل الدخول من هذه الصفحة",
     invalid: "يرجى تعبئة الحقول المطلوبة بشكل صحيح",
     signupOk: "تم إنشاء الحساب! تحقق من بريدك الإلكتروني ثم سجّل الدخول.",
+  },
+  assistant: {
+    title: "المساعد الذكي",
+    subtitle: "اسأل عن الخدمات أو الأسعار أو المواعيد",
+    welcome: "مرحباً! اسألني أي شيء عن خدمات Rami Clim وسأساعدك بسرعة.",
+    placeholder: "اكتب سؤالك…",
+    send: "إرسال",
+    thinking: "يفكّر…",
+    clear: "مسح",
+    error: "تعذر الحصول على إجابة. حاول مرة أخرى.",
+    disclaimer: "قد تكون إجابات الذكاء الاصطناعي غير دقيقة. للحالات المستعجلة تواصل معنا مباشرة.",
   },
   client: {
     title: "مساحة العميل",
